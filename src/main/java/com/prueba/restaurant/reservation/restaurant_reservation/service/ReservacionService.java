@@ -52,7 +52,12 @@ public class ReservacionService {
 
     public List<Reservacion> listarTodas() {
         List<ReservacionEntity> reservacionEntities = reservacionRepository.findAll();
-        return reservacionEntities.stream().map(el -> modelMapper.map(el, Reservacion.class)).toList();
+        return reservacionEntities.stream().map(el -> {
+            Reservacion reservacion = modelMapper.map(el, Reservacion.class);
+            reservacion.setHorarioId(el.getHorarioId().getId());
+            reservacion.setClienteId(el.getCliente().getId());
+            return reservacion;
+        }).toList();
     }
 
     public boolean actualizarReservacion(int id, Reservacion nuevaReservacion) {
